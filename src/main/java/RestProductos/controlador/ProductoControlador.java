@@ -1,6 +1,11 @@
 package RestProductos.controlador;
 
+import RestProductos.dto.CreateProductoDTO;
+import RestProductos.dto.ProductoDTO;
+import RestProductos.dto.converter.ProductoDTOConverter;
+import RestProductos.modelo.Categoria;
 import RestProductos.modelo.Producto;
+import RestProductos.repositorio.CategoriaRepositorio;
 import RestProductos.repositorio.ProductoRepositorio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +27,10 @@ public class ProductoControlador {
     //@Autowired
     //ProductoRepositorio productoRepositorio;
 
-    // Hace lo mismo que el autowired con @RequierArgsConstructor
+    // Hace lo mismo que el autowired con @RequiredArgsConstructor
     private final ProductoRepositorio productoRepositorio;
+    private final ProductoDTOConverter productoDTOConverter;
+    private final CategoriaRepositorio categoriaRepositorio;
 
 
 
@@ -153,6 +161,36 @@ public ResponseEntity<?> eliminarProducto(@PathVariable Long id) {
         } else return null;
     }
 */
+
+
+    @GetMapping("/api/productoDTO")
+    public ResponseEntity<?> obtenerTodosAtravesDeDTO(){
+        List<Producto> result = productoRepositorio.findAll();
+        if (result.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else {
+            List<ProductoDTO> listaDTO = result.stream().map(
+                    productoDTOConverter::convertToDTO).collect(Collectors.toList());
+            return ResponseEntity.ok(listaDTO);
+        }
+    }
+
+    // Nuevo a traves de un DTO
+    @PostMapping("/api/productoDTO")
+    public ResponseEntity<?> nuevoProductoDTO(@RequestBody CreateProductoDTO nuevo) {
+        // A fuego
+        /*Producto productoNuevo = new Producto();
+        productoNuevo.setNombre(nuevo.getNombre());
+        productoNuevo.setPrecio(nuevo.getPrecio());
+        Categoria categoria = categoriaRepositorio.findById(nuevo.getCategoriaId()).orElse(null);
+        productoNuevo.setCategoria(categoria);*/
+
+        // Con DTO converter
+        Producto productoNuevo = productoDTOConverter.convertDesdeProductoDTO(nuevo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productoRepositorio.save(productoNuevo));
+    }
+
+
 
 
 }

@@ -26,4 +26,7 @@ public class Producto {
     @JoinColumn(name = "categoria_id")
     Categoria categoria;
 
+
+
+
 }
