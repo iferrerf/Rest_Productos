@@ -3,19 +3,16 @@ package RestProductos.controlador;
 import RestProductos.dto.CreateProductoDTO;
 import RestProductos.dto.ProductoDTO;
 import RestProductos.dto.converter.ProductoDTOConverter;
-import RestProductos.modelo.Categoria;
+import RestProductos.error.ProductoNoEncontradoException;
 import RestProductos.modelo.Producto;
 import RestProductos.repositorio.CategoriaRepositorio;
 import RestProductos.repositorio.ProductoRepositorio;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -54,12 +51,15 @@ public class ProductoControlador {
      * @return 404 si no encuentra el producto y
      */
     @GetMapping("/api/producto/{id}")
-    public ResponseEntity<?> obtenerUno2(@PathVariable Long id) {
-        Producto result = productoRepositorio.findById(id).orElse(null);
+    public Producto obtenerUno2(@PathVariable Long id) {
+        /*Producto result = productoRepositorio.findById(id).orElse(null);
         if (result == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(result);*/
+
+        return productoRepositorio.findById(id).orElseThrow(() -> new ProductoNoEncontradoException(id));
+
     }
 
 
@@ -163,6 +163,7 @@ public ResponseEntity<?> eliminarProducto(@PathVariable Long id) {
 */
 
 
+//    @CrossOrigin(origins = "http://localhost:9999")
     @GetMapping("/api/productoDTO")
     public ResponseEntity<?> obtenerTodosAtravesDeDTO(){
         List<Producto> result = productoRepositorio.findAll();
