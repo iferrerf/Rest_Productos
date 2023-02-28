@@ -29,12 +29,12 @@ public class MiConfiguracion {
 
     // Más limpio
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    public WebMvcConfigurer corsConfigurer2() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/productoDTO/**")
-                        .allowedOrigins("http://localhost:9999")
+                        .allowedOrigins("http://localhost:9998")
                         .allowedMethods("GET")
                         .maxAge(3600);
             }

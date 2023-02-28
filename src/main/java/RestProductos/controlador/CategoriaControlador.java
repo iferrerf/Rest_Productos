@@ -26,19 +26,7 @@ public class CategoriaControlador {
 
 
     /**
-     * Obtener un producto en base a su ID
-     *
-     * @param id
-     * @return Null si no se encuentra el producto
-     */
-/*    @GetMapping("/api/producto")
-    public Producto obtenerUno(@PathVariable Long id) {
-        return productoRepositorio.findById(id).orElse(null);
-    }*/
-
-
-    /**
-     * Obtener un producto en base a su ID
+     * Obtener una categoria en base a su ID
      *
      * @param id
      * @return 404 si no encuentra el producto y
@@ -54,12 +42,12 @@ public class CategoriaControlador {
 
 
     /**
-     * Obtener todos los productos
+     * Obtener todas las categorias
      *
      * @return 404 si no hay productos, 200 y la lista de productos si hay uno o más
      */
-    @GetMapping("/api/categoria")
-    public ResponseEntity<?> obtenerTodos() {
+    @GetMapping("/api/categorias")
+    public ResponseEntity<?> obtenerTodasCategorias() {
         List<Categoria> result = categoriaRepositorio.findAll();
         if (result.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -69,7 +57,7 @@ public class CategoriaControlador {
 
 
     @PostMapping("/api/categoria")
-    public ResponseEntity<?> insertarProducto2(@RequestBody Categoria categoria) {
+    public ResponseEntity<?> insertarCategoria(@RequestBody Categoria categoria) {
         Categoria salvado = categoriaRepositorio.save(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvado);
     }
@@ -84,7 +72,7 @@ public class CategoriaControlador {
      * @return 200 ok si la edicion tiene exito, 404 si no se encuentra el producto a editar
      */
     @PutMapping("api/categoria/{id}")
-    public ResponseEntity<?> editarProducto3(@RequestBody Categoria editar, @PathVariable Long id) {
+    public ResponseEntity<?> editarCategoria(@RequestBody Categoria editar, @PathVariable Long id) {
         return categoriaRepositorio.findById(id).map(categoria -> {
             categoria.setNombre(editar.getNombre());
             return ResponseEntity.ok(categoriaRepositorio.save(categoria));
@@ -115,7 +103,7 @@ public class CategoriaControlador {
 
     @PutMapping("api/categoria2/{id}")
     public Categoria editarProducto2(@RequestBody Categoria editar, @PathVariable Long id) {
-        editar.setId(id);
+        editar.setCodigo(id);
         return categoriaRepositorio.findById(id)
                 .map(producto -> {
                     categoriaRepositorio.save(editar);

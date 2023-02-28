@@ -7,7 +7,7 @@ public class CreateProductoDTO {
 
     private String nombre;
     private Double precio;
-    private Long categoriaId;
+    private Long categoriaCodigo;
 
 
 }

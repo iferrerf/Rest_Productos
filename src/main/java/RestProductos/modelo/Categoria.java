@@ -20,7 +20,7 @@ import javax.persistence.Id;
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Long codigo;
     String nombre;
 
 }
